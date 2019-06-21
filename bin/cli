@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+const {sync: glob} = require('glob');
+
+const pwd = process.cwd();
+
+const {join, extname} = require('path');
+
+const {writeFileSync} = require('fs');
+
+const meta = require(join(pwd, 'meta.json'));
+
+const basedir = join(pwd, 'code');
+const files = glob(join(pwd, 'code/**/*')).map((f) => {
+  return f.slice(basedir.length + 1);
+}).filter((f) => {
+  return extname(f) !== '';
+}).map((f) => {
+  const src = f;
+  const active = f === 'index.php';
+  const visible = active;
+
+  return { src, active, visible };
+});
+
+meta.files = files;
+
+const newMeta = JSON.stringify(meta,null,2);
+
+console.log(newMeta);
+
+writeFileSync(join(pwd, 'meta.json'), newMeta);
