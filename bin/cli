@@ -19,8 +19,9 @@ const files = glob(join(pwd, 'code/**/*')).map((f) => {
   const src = f;
   const active = f === 'index.php';
   const visible = active;
+  const enabled = active;
 
-  return { src, active, visible };
+  return { src, active, visible, enabled };
 });
 
 meta.files = files;
